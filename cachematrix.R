@@ -30,14 +30,34 @@ makeCacheMatrix <- function(x = matrix()) {     ## argument has default more of 
 ## cacheSolve will pull inverse matrix from cache and save compute time
 
 cacheSolve <- function(x, ...) {
-  inv <- x$getinverse() 
-  if (!is.null(inv) ) {
-    message("getting cached data")
-    return(inv)
+  # get value of the matrix from prior makeCacheMatrix function
+  inv <- x$getinverse()           
+  if (!is.null(inv) ) {             # if inverse matrix is not NULL
+    message("getting cached data")  # message user we are using cached value
+    return(inv)                     # return the cached matrix
   }
-  data <- x$get()
-  inv <- solve(data, ...)
-  x$setinverse(inv)
+  data <- x$get()                   # if we are here we need to calculate so get matrix data
+  inv <- solve(data, ...)           # call solve function to get inverse matrix
+  x$setinverse(inv)                 # set value to save 
   inv
         ## Return a matrix that is the inverse of 'x'
 }
+
+# Testing above functions
+#
+#> my_matrix <- makeCacheMatrix(matrix(1:4, 2, 2))
+#> my_matrix$get()
+#[,1] [,2]
+#[1,]    1    3
+#[2,]    2    4
+#
+#
+#> my_matrix$getinverse()
+#NULL
+#
+#
+#> cacheSolve(my_matrix)
+# [,1] [,2]
+# [1,]   -2  1.5
+# [2,]    1 -0.5
+#
